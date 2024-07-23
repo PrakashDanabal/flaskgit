@@ -1,0 +1,33 @@
+name: Deploy to GCE
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Build and push Docker image
+        run: |
+          docker build -t your-docker-username/your-image-name .
+          docker login -u your-docker-username -p your-docker-password
+          docker push your-docker-username/your-image-name
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GCE
+        uses: appleboy/ssh-action@master
+        with:
+          host: your-gce-instance-ip
+          username: your-gce-username
+          key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker pull your-docker-username/your-image-name
+            sudo docker stop flask-website || true 
+            sudo docker rm flask-website || true
+            sudo docker run -d -p 80:8080 --name flask-website your-docker-username/your-image-name
