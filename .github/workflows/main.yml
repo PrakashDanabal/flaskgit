@@ -29,10 +29,11 @@ jobs:
 
       - name: Push Docker image to Artifact Registry
         run: |
-           gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }}
-           gcloud auth configure-docker us-central1-docker.pkg.dev
-           docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
-           docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+         gcloud auth activate-service-account --key-file=${{ secrets.GCP_SA_KEY }} # Use your secret
+         gcloud auth configure-docker us-central1-docker.pkg.dev
+         docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+         docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+
 
  
 
