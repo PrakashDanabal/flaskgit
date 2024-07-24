@@ -22,6 +22,7 @@ jobs:
         with:
           workload_identity_provider: 'projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool'
           service_account: '273844163073-compute@developer.gserviceaccount.com'
+          project_id: 'myprojectprakash1'
       - name: Build Docker image
         run: docker build -t myprojectprakash1
 
