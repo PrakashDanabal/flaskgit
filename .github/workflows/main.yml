@@ -24,7 +24,7 @@ jobs:
           service_account: '273844163073-compute@developer.gserviceaccount.com'
           project_id: 'myprojectprakash1'
       - name: Build Docker image
-        run: docker build -t myprojectprakash1
+        run: docker build -t myprojectprakash1 .
 
       - name: Push Docker image to Artifact Registry
         run: |
