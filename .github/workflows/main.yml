@@ -14,6 +14,8 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -24,8 +26,24 @@ jobs:
           workload_identity_provider: 'projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool'
           service_account: '273844163073-compute@developer.gserviceaccount.com'
           project_id: 'myprojectprakash1'
+
+
+      - name: Create credentials file
+        run: echo '${{ secrets.GCP_SA_KEY }}' > key.json  # Create JSON file
+      - name: Set environment variables
+        run: |
+          echo "GOOGLE_APPLICATION_CREDENTIALS=key.json" >> $GITHUB_ENV  # Reference created file
       - name: Build Docker image
         run: docker build -t myprojectprakash1 .
+ 
+      - name: Push Docker image to Artifact Registry
+        run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
+          docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+          docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+
+
+          
 
       - name: Push Docker image to Artifact Registry
         run: |
