@@ -6,8 +6,9 @@ on:
       - main
 
 permissions:
-  id-token: write 
-  contents: read  # This may be needed depending on your workflow
+  id-token: write
+  contents: read
+  packages: write
 
 
 jobs:
