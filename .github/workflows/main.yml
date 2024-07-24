@@ -17,8 +17,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t your-docker-username/your-image-name .
-          docker push your-docker-username/your-image-name
+          docker build -t prakashdanabal93/myflaskappimg
+          docker push prakashdanabal93/myflaskappimg
 
   deploy:
     runs-on: ubuntu-latest
@@ -27,11 +27,11 @@ jobs:
       - name: Deploy to GCE
         uses: appleboy/ssh-action@master
         with:
-          host: your-gce-instance-ip
-          username: your-gce-username
+          host: 34.42.139.117
+          username: prakashdanabal93@gmail.com
           key: ${{ secrets.GCE_SSH_PRIVATE_KEY }}
           script: |
-            sudo docker pull your-docker-username/your-image-name
+            sudo docker pull prakashdanabal93/myflaskappimg
             sudo docker stop flask-website || true 
             sudo docker rm flask-website || true
-            sudo docker run -d -p 80:8080 --name flask-website your-docker-username/your-image-name
+            sudo docker run -d -p 80:8080 --name flask-website prakashdanabal93/myflaskappimg
