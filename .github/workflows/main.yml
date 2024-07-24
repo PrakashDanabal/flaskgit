@@ -1,46 +1,56 @@
 name: Build and Deploy to GCE
 
 on:
-  push:
-    branches:
-      - main
+ push:
+  branches:
+   - main
 
+   
 permissions:
-  id-token: write
-  contents: read
-  packages: write
+ id-token: write
+ contents: read
+ packages: write
+
 
 jobs:
-  build-and-deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+ build-and-deploy:
+  runs-on: ubuntu-latest
 
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          workload_identity_provider: 'projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool'
-          service_account: '273844163073-compute@developer.gserviceaccount.com'
+   
+  steps:
+   - name: Checkout code
+    uses: actions/checkout@v3
 
-      - name: Build Docker image
-        run: docker build -t myprojectprakash1 .
+   - name: Authenticate to Google Cloud
+    uses: google-github-actions/auth@v1
+    with:
+     workload_identity_provider: 'projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool'
+     service_account: '273844163073-compute@developer.gserviceaccount.com'
+     project_id: 'myprojectprakash1'
 
-      - name: Push to Artifact Registry (with error handling)
-        run: |
-          set -e # Fail fast on any error
-          
-          gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
-          
-          # Attempt to push, capturing errors
-          docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest || (
-            echo "Error pushing to Artifact Registry. Please check logs."
-            exit 1
-          )
 
-      - name: Update Compute Engine Instance
-        run: |
-          gcloud compute instances update-container instance-20240723-125548 \
-            --zone us-central1-b \
-            --container-image us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest 
+   - name: Create credentials file
+    run: echo '${{ secrets.GCP_SA_KEY }}' > key.json # Create JSON file
+   - name: Set environment variables
+    run: |
+     echo "GOOGLE_APPLICATION_CREDENTIALS=key.json" >> $GITHUB_ENV # Reference created file
+   - name: Build Docker image
+    run: docker build -t myprojectprakash1 .
+ 
+   - name: Push Docker image to Artifact Registry
+    run: |
+     gcloud auth configure-docker us-central1-docker.pkg.dev
+     docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+     docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+
+
+
+
+
+ 
+
+   - name: Update Compute Engine Instance
+    run: |
+     gcloud compute instances update-container instance-20240723-125548 \
+      --zone us-central1-b \
+      --container-image us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
