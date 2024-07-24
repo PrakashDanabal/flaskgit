@@ -15,7 +15,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          workload_identity_provider: 'projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool'
 
       - name: Build Docker image
         run: docker build -t myprojectprakash1
