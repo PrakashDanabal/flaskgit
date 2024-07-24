@@ -29,7 +29,7 @@ jobs:
       - name: Push Docker image to Artifact Registry
         run: |
           gcloud auth configure-docker us-central1-docker.pkg.dev
-          docker tag your-project-name us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+          docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
           docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskappmyprojectprakash1:latest
 
       - name: Update Compute Engine Instance
