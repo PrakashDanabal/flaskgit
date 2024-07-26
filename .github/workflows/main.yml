@@ -22,17 +22,19 @@ jobs:
         with:
           workload_identity_provider: "projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool"
           service_account: "273844163073-compute@developer.gserviceaccount.com"
-          project_id: "myprojectprakash1"   # Add this line with your project ID
+          project_id: "myprojectprakash1"
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1  
+
+      - name: Authenticate Docker
+        run: gcloud auth login-docker  # Refresh authentication for Docker
 
       - name: Build Docker Image
         run: docker build -t myprojectprakash1 .
 
       - name: Push Docker Image to Artifact Registry
         run: |
-          gcloud auth configure-docker us-central1-docker.pkg.dev
           docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
           docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
 
