@@ -39,7 +39,12 @@ jobs:
             docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
 
       - name: Update Compute Engine Instance
-        run: |
-          gcloud compute instances update-container instance-20240723-125548 \
-            --zone us-central1-b \
-            --container-image us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool
+          service_account: 273844163073-compute@developer.gserviceaccount.com
+          project_id: myprojectprakash1
+          run: |
+            gcloud compute instances update-container instance-20240723-125548 \
+              --zone us-central1-b \
+              --container-image us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
