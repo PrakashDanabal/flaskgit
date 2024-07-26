@@ -28,7 +28,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1  
 
       - name: Authenticate Docker
-        run: gcloud auth login-docker  # Refresh authentication for Docker
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev # Configure Docker authentication
 
       - name: Build Docker Image
         run: docker build -t myprojectprakash1 .
