@@ -40,7 +40,8 @@ jobs:
         env:
           GCLOUD_SERVICE_KEY: ${{ steps.gcloud-credentials.outputs.result }}
         run: |
-          docker login -u _json_key -p "$GCLOUD_SERVICE_KEY" https://us-central1-docker.pkg.dev
+          echo "$GCLOUD_SERVICE_KEY" | docker login -u _json_key --password-stdin https://us-central1-docker.pkg.dev
+          
 
       - name: Build Docker Image
         run: docker build -t myprojectprakash1 .
