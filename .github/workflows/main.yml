@@ -31,17 +31,12 @@ jobs:
       - name: Configure Docker
         run: gcloud auth configure-docker
 
-      # Get the GCloud credentials from the previous step
-      - id: gcloud-credentials
-        run: echo ${{ steps.auth.outputs.credentials }} > gcloud-service-key.json
-
-
       - name: Authenticate to Artifact Registry with Docker
         env:
-          GCLOUD_SERVICE_KEY: ${{ steps.gcloud-credentials.outputs.result }}
+          GCLOUD_SERVICE_KEY: ${{ secrets.GCP_SA_KEY }} # replace with your secret name
         run: |
-         echo "$GCLOUD_SERVICE_KEY" | base64 -d | docker login -u _json_key --password-stdin https://us-central1-docker.pkg.dev
-          
+          echo "$GCLOUD_SERVICE_KEY" > key.json
+          cat key.json | docker login -u _json_key --password-stdin https://us-central1-docker.pkg.dev
 
       - name: Build Docker Image
         run: docker build -t myprojectprakash1 .
