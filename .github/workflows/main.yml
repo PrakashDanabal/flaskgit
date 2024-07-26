@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Authenticate to Google Cloud
+        id: auth
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: "projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool"
@@ -27,8 +28,19 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1  
 
-      - name: Authenticate Docker
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev # Configure Docker authentication
+      - name: Configure Docker
+        run: gcloud auth configure-docker
+
+      # Get the GCloud credentials from the previous step
+      - id: gcloud-credentials
+        run: echo ${{ steps.auth.outputs.credentials }} > gcloud-service-key.json
+
+
+      - name: Authenticate to Artifact Registry with Docker
+        env:
+          GCLOUD_SERVICE_KEY: ${{ steps.gcloud-credentials.outputs.result }}
+        run: |
+          docker login -u _json_key -p "$GCLOUD_SERVICE_KEY" https://us-central1-docker.pkg.dev
 
       - name: Build Docker Image
         run: docker build -t myprojectprakash1 .
