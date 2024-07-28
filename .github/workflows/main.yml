@@ -36,4 +36,7 @@ jobs:
         run: docker build . --file Dockerfile --tag myflaskimage
 
       - name: Push Docker image
-        run: docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimage:latest
+        run: |
+          IMAGE_URI="us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimage"
+          docker tag myflaskimage $IMAGE_URI
+          docker push $IMAGE_URI
