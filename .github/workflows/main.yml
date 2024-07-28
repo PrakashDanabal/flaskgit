@@ -31,21 +31,11 @@ jobs:
       - name: Configure Docker
         run: gcloud auth configure-docker
 
-      - name: Authenticate to Artifact Registry with Docker
-        run: |
-          gcloud auth configure-docker \us-central1-docker.pkg.dev
-          echo '${{ secrets.GCP_SA_KEY }}' | docker login -u _json_key --password-stdin https://us-central1-docker.pkg.dev
+      build:
 
-      - name: Build Docker Image
-        run: docker build -t myprojectprakash1 .
+    runs-on: ubuntu-latest
 
-      - name: Push Docker Image to Artifact Registry
-        run: |
-          docker tag myprojectprakash1 us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
-          docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
-
-      - name: Update Compute Engine Instance
-        run: |
-          gcloud compute instances update-container instance-20240723-125548 \
-            --zone us-central1-b \
-            --container-image us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myprojectprakash1:latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
