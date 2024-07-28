@@ -39,7 +39,7 @@ jobs:
 
       - name: Push Docker image
         run: |
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
+          gcloud auth configure-docker us-central1-docker.pkg.dev
           IMAGE_URI="us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimage"
           docker tag myflaskimage $IMAGE_URI
           docker push $IMAGE_URI
