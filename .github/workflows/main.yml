@@ -23,7 +23,7 @@ jobs:
         id: auth
         uses: google-github-actions/auth@v1
         with:
-          workload_identity_provider: "projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool"
+          workload_identity_provider: "projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider"
           service_account: "273844163073-compute@developer.gserviceaccount.com"
           project_id: "myprojectprakash1"
           create_credentials_file: true
@@ -39,8 +39,8 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag myflaskimage
 
-      - name: Check Authentication
-        run: gcloud auth list
+      - name: Authenticate with gcloud (for debugging)
+        run: gcloud auth login
 
       - name: Create Artifact Registry Repository (if not exists)
         run: gcloud artifacts repositories create myflaskapp --repository-format=docker --location=us-central1 --async
