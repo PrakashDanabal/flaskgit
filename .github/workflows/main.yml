@@ -26,6 +26,9 @@ jobs:
           workload_identity_provider: "projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-pool"
           service_account: "273844163073-compute@developer.gserviceaccount.com"
           project_id: "myprojectprakash1"
+          create_credentials_file: true
+          access_token_lifetime: 600s   
+          export_environment_variables: true
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1  
@@ -39,10 +42,6 @@ jobs:
 
       - name: Push Docker image
         run: |
-          gcloud auth print-access-token \
-          --impersonate-service-account 273844163073-compute@developer.gserviceaccount.com | docker login \
-          -u oauth2accesstoken \
-          --password-stdin https://us-central1-docker.pkg.dev
           IMAGE_URI="us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimage"
           docker tag myflaskimage $IMAGE_URI
           docker push $IMAGE_URI
