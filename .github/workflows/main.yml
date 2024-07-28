@@ -40,6 +40,9 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag myflaskimage
 
+      - name: Check Authentication
+        run: gcloud auth list
+
       - name: Push Docker image
         run: |
           IMAGE_URI="us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimage"
