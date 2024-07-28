@@ -25,6 +25,7 @@ jobs:
         with:
           workload_identity_provider: "projects/273844163073/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider"
           service_account: "273844163073-compute@developer.gserviceaccount.com"
+          service_account_key: ${{ GCE_SA_KEY }}
           project_id: "myprojectprakash1"
           create_credentials_file: true
           access_token_lifetime: 600s   
