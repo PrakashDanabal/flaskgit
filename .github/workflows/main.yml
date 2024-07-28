@@ -34,21 +34,13 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1  
 
-      - name: Configure Docker
-        run: gcloud auth configure-docker
-
-      - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag myflaskimage
-
-      - name: Authenticate with gcloud (for debugging)
-        run: gcloud auth login
-
-      - name: Create Artifact Registry Repository (if not exists)
-        run: gcloud artifacts repositories create myflaskapp --repository-format=docker --location=us-central1 --async
-
-
-      - name: Push Docker image
+      - name: Build and push the docker image
+        env:
+          GOOGLE_PROJECT: myprojectprakash1
         run: |
-          IMAGE_URI="us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimage"
-          docker tag myflaskimage $IMAGE_URI
-          docker push $IMAGE_URI
+          gcloud auth configure-docker us-central-1-docker.pkg.dev
+          docker build -t us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimg:latest .
+          docker push us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimg:latest
+
+
+    
