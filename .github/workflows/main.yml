@@ -42,6 +42,10 @@ jobs:
       - name: Check Authentication
         run: gcloud auth list
 
+      - name: Create Artifact Registry Repository (if not exists)
+        run: gcloud artifacts repositories create myflaskapp --repository-format=docker --location=us-central1 --async
+
+
       - name: Push Docker image
         run: |
           IMAGE_URI="us-central1-docker.pkg.dev/myprojectprakash1/myflaskapp/myflaskimage"
